@@ -10,7 +10,7 @@ typedef vector<vector<int> > Plateau;
 Plateau plateauVide() {
 	Plateau plateau;
 	plateau = Plateau(4);
-	for (int i = 0; i < plateau.size(); i++) {
+	for (int i = 0; i < 4; i++) {
 		plateau[i] = vector<int>(4);
 		for(int j= 0; j< 4; j++){
 			plateau[i][j]=0;
@@ -56,7 +56,7 @@ PlateauScore deplacementGauche(PlateauScore plateau) {
 				plateau.plateau[i][t] *= 2;
 				plateau.score += plateau.plateau[i][t];
 				plateau.plateau[i][t + 1] = 0;
-				for (int p = t + 1; p < plateau.plateau[i].size() - 1; p++) {
+				for (int p = t + 1; p < 3; p++) {
 					plateau.plateau[i][p] = plateau.plateau[i][p + 1];
 					plateau.plateau[i][p + 1] = 0;
 				}
@@ -122,7 +122,7 @@ PlateauScore deplacementHaut(PlateauScore plateau) {
 				plateau.plateau[t][j] *= 2;
 				plateau.score += plateau.plateau[t][j];
 				plateau.plateau[t + 1][j] = 0;
-				for (int p = t + 1; p < plateau.plateau.size() - 1; p++) {
+				for (int p = t + 1; p < 3; p++) {
 					plateau.plateau[p][j] = plateau.plateau[p + 1][j];
 					plateau.plateau[p + 1][j] = 0;
 				}
@@ -140,7 +140,7 @@ PlateauScore deplacementHaut(PlateauScore plateau) {
 }
 PlateauScore deplacementBas(PlateauScore plateau) {
 	Plateau plateauOrigine = plateau.plateau;
-	for (int j = 0; j < plateau.plateau[0].size(); j++) {
+	for (int j = 0; j < 4; j++) {
 		for (int i = 1; i < 4; i++) {
 			if (plateau.plateau[i][j] == 0) {
 				for (int k = i - 1; k >= 0; k--) {
