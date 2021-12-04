@@ -18,37 +18,34 @@ int main(int argc, char*argv[]) {
     start_y = start_x = 0;
 
     WINDOW * win = newwin(height, width, start_y, start_x);
+
     wrefresh(win);
     keypad(win,true);
+
     if(has_colors()){
         start_color();
         init_pair(1,COLOR_YELLOW,COLOR_WHITE);
-        init_pair(2,COLOR_CYAN,COLOR_WHITE);
-        init_pair(3,COLOR_RED,COLOR_WHITE);
     }else{
         wprintw(win,"Does not have color!");
-        endwin();
+        wrefresh(win);
+        sleep(2);
+        return -1;
     }
-    start_color();
-    init_pair(1,COLOR_YELLOW,COLOR_WHITE);
-    init_pair(2,COLOR_CYAN,COLOR_WHITE);
-    init_pair(3,COLOR_RED,COLOR_WHITE);
-
+    wbkgd(win,COLOR_PAIR(1));
     PlateauScore plateau;
     plateau.plateau = plateauInitial();
     plateau.score = 0;
     wattron(win,COLOR_PAIR(1));
     mvwprintw(win,3,0,dessine(plateau.plateau).c_str());
-    wattroff(win,COLOR_PAIR(1));
     wrefresh(win);
-    wattron(win,COLOR_PAIR(3));
     mvwprintw(win,0,0,"Saisir q pour quitter");
-    wattroff(win,COLOR_PAIR(3));
     wrefresh(win);
     bool terminate;
     terminate = true;
+
+
+
     while (not estTermine(plateau) and not estGagnant(plateau.plateau) and terminate ==true) {
-        mvwprintw(win,14,0,"                ");
         int d;
         d = wgetch(win);
         mvwprintw(win,1,0,"use up down left and right to control:");
@@ -76,35 +73,32 @@ int main(int argc, char*argv[]) {
                 mvwprintw(win,1,0,"please type in only up, down, right and left!");
                 wrefresh(win);      
         }
-        wattron(win,COLOR_PAIR(1));
         mvwprintw(win,3,0,dessine(plateau.plateau).c_str());
-        wattroff(win,COLOR_PAIR(1));
-        wattron(win,COLOR_PAIR(3));
         mvwprintw(win,2,0,"score:");
-        mvwprintw(win,2,8,"%d",plateau.score);
+        mvwprintw(win,2,6,"  %d",plateau.score);
         wrefresh(win);
-        wattroff(win,COLOR_PAIR(3));
         if (estTermine(plateau)) {
-            mvwprintw(win,14,0,"Vous avez perdu.");
+            mvwprintw(win,1,0,"Vous avez perdu.");
             wrefresh(win);
             sleep(3);
                        
             plateau.plateau = plateauInitial();
-            plateau.score = 0;
-            mvwprintw(win,2,8,"      ");
+            plateau.score = 1;
+            mvwprintw(win,2,7,"      ");
             
         }
         else if (estGagnant(plateau.plateau)) {
-            mvwprintw(win,14,0,"Vous avez perdu.");
+            mvwprintw(win,1,0,"Vous avez perdu.");
             wrefresh(win);
             sleep(3);
 
             plateau.plateau = plateauInitial();
             plateau.score = 0;
-            mvwprintw(win,2,8,"      ");
+            mvwprintw(win,2,7,"      ");
             
         }
     }
+    attroff(COLOR_PAIR(1));
 
     endwin();
 }
