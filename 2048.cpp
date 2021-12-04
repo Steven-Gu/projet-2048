@@ -71,7 +71,7 @@ int main(int argc, char*argv[]) {
         mvwprintw(win,2,6,"  %d",plateau.score);
         wrefresh(win);
         if (estTermine(plateau)) {
-            mvwprintw(win,1,0,"Vous avez perdu.                      ");
+            mvwprintw(win,12,0,"Vous avez perdu.");
             wrefresh(win);
             sleep(3);
                        
@@ -81,13 +81,8 @@ int main(int argc, char*argv[]) {
             
         }
         else if (estGagnant(plateau.plateau)) {
-            mvwprintw(win,1,0,"Vous avez gagné.                     ");
-            wrefresh(win);
-            sleep(3);
-            plateau.plateau = plateauInitial();
-            plateau.score = 0;
-            mvwprintw(win,2,7,"      ");
-            
+            mvwprintw(win,12,0,"Vous avez gagné! Vous pouvez continuer.");
+            wrefresh(win);        
         }
     }
     attroff(COLOR_PAIR(1));
