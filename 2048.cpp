@@ -51,27 +51,22 @@ int main(int argc, char*argv[]) {
         mvwprintw(win,1,0,"use up down left and right to control:");
         wrefresh(win);
         if (d==KEY_LEFT){
-                mvwprintw(win,1,0,"                                             ");
                 wrefresh(win);
                 plateau = deplacement(plateau, GAUCHE);
         }else if(d==KEY_RIGHT){
-                mvwprintw(win,1,0,"                                             ");
+                
                 wrefresh(win);
                 plateau = deplacement(plateau, DROITE);
         }else if(d==KEY_UP){
-                mvwprintw(win,1,0,"                                             ");
+            
                 wrefresh(win);
                 plateau = deplacement(plateau, HAUT);
         }else if(d==KEY_DOWN){
-                mvwprintw(win,1,0,"                                             ");
                 wrefresh(win);
                 plateau = deplacement(plateau, BAS);
         }else if(d==KEY_q){
 
             break;
-        }else{
-                mvwprintw(win,1,0,"please type in only up, down, right and left!");
-                wrefresh(win);      
         }
         mvwprintw(win,3,0,dessine(plateau.plateau).c_str());
         mvwprintw(win,2,0,"score:");
