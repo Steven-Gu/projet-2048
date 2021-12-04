@@ -49,6 +49,7 @@ int main(int argc, char*argv[]) {
         int d;
         d = wgetch(win);
         mvwprintw(win,1,0,"use up down left and right to control:");
+        mvwprintw(win,12,0,"                                        ");
         wrefresh(win);
         if (d==KEY_LEFT){
                 wrefresh(win);
