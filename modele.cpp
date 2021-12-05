@@ -1,20 +1,26 @@
 #include<vector>
 #include<iostream>
+#include<sstream>
 #include<cstdlib>
 #include<string>
 #include"modele.h"
 using namespace std;
-typedef vector<vector<int>> Plateau;
+typedef vector<vector<int> > Plateau;
 
+//Produire un tableau vide
 Plateau plateauVide() {
 	Plateau plateau;
 	plateau = Plateau(4);
 	for (int i = 0; i < 4; i++) {
-		plateau[i] = { 0,0,0,0 };
+		plateau[i] = vector<int>(4);
+		for(int j= 0; j< 4; j++){
+			plateau[i][j]=0;
+		}
 	}
 	return plateau;
 }
 
+//Initialiser un plateau vide et remplir deux espaces différents avec 2 ou 4 selon la probabilité.
 Plateau plateauInitial() {
 	Plateau plateau = plateauVide();
 	int tuile1 = rand() % (16);
@@ -28,6 +34,7 @@ Plateau plateauInitial() {
 	return plateau;
 }
 
+//La probabilité de générer 4 est de 1 sur 10, donc un nombre aléatoire de 0 à 10 générera 4 si le nombre est 0 et 2 s'il ne l'est pas.
 int tireDeuxOuQuatre() {
 	int valeur = rand() % (10);
 	if (valeur == 0)
@@ -39,6 +46,11 @@ int tireDeuxOuQuatre() {
 PlateauScore deplacementGauche(PlateauScore plateau) {
 	Plateau plateauOrigine = plateau.plateau;
 	for (int i = 0; i < 4; i++) {
+/*Chaque ligne est vérifiée de droite à gauche et si un 0 est rencontré, elle est déplacée à la fin.
+ *Si nous vérifions de gauche à droite, il y aura des cas où nous ne pourrons pas déplacer le 0 à l'extrême droite. 
+ *Par exemple (0, 0, 4, 0), le premier coup devient (0, 4, 0, 0), après quoi la position la plus à gauche du 0 ne sera pas vérifiée,
+ *ce qui fait qu'il ne deviendra pas (4, 0, 0, 0).
+ */
 		for (int j = 2; j >= 0; j--) {
 			if (plateau.plateau[i][j] == 0) {
 				for (int k = j + 1; k < 4; k++) {
@@ -47,6 +59,10 @@ PlateauScore deplacementGauche(PlateauScore plateau) {
 				}
 			}
 		}
+/*Vérifier de gauche à droite, si l'élément actuel est égal à l'élément suivant, 
+ *multiplier l'élément actuel par deux et augmenter le score correspondant,
+ *l'élément suivant devient zéro et le déplacer à la fin.
+ */
 		for (int t = 0; t < 3; t++) {
 			if (plateau.plateau[i][t] == plateau.plateau[i][t + 1]) {
 				plateau.plateau[i][t] *= 2;
@@ -59,6 +75,7 @@ PlateauScore deplacementGauche(PlateauScore plateau) {
 			}
 		}
 	}
+//Si le coup est réussi, le plateau est modifié et 2 ou 4 sont ajoutés à un espace vide aléatoire.
 	if (plateau.plateau != plateauOrigine) {
 		int tuile = rand() % 16;
 		while (plateau.plateau[tuile / 4][tuile % 4] != 0) {
@@ -69,6 +86,7 @@ PlateauScore deplacementGauche(PlateauScore plateau) {
 	return plateau;
 }
 
+//Similaire à la fonction deplacementGauche
 PlateauScore deplacementDroite(PlateauScore plateau) {
 	Plateau plateauOrigine = plateau.plateau;
 	for (int i = 0; i < 4; i++) {
@@ -102,6 +120,8 @@ PlateauScore deplacementDroite(PlateauScore plateau) {
 	
 	return plateau;
 }
+
+//Similaire à la fonction deplacementGauche
 PlateauScore deplacementHaut(PlateauScore plateau) {
 	Plateau plateauOrigine = plateau.plateau;
 	for (int j = 0; j < 4; j++) {
@@ -134,6 +154,8 @@ PlateauScore deplacementHaut(PlateauScore plateau) {
 	}
 	return plateau;
 }
+
+//Similaire à la fonction deplacementGauche
 PlateauScore deplacementBas(PlateauScore plateau) {
 	Plateau plateauOrigine = plateau.plateau;
 	for (int j = 0; j < 4; j++) {
@@ -166,6 +188,8 @@ PlateauScore deplacementBas(PlateauScore plateau) {
 	}
 	return plateau;
 }
+
+//Différentes fonctions de déplacement sont exécutées en fonction de la direction du mouvement
 PlateauScore deplacement(PlateauScore plateau, int direction) {
   switch ( direction ) {
     case GAUCHE:
@@ -181,40 +205,38 @@ PlateauScore deplacement(PlateauScore plateau, int direction) {
       exit(-1);
   }
 }
-void dessine(Plateau g) {
-	vector<vector<string>> plateau(4);
+//Convertissez les entiers du tableau en chaînes de caractères, en les formatant pour l'impression en fonction de leur longueur.
+string dessine(Plateau g) {
+	stringstream ss;
+	string dessine;
+	ss<<"*************************"<<endl;
 	for (int i = 0; i < 4; i++) {
-		plateau[i] = vector<string>(4);
-		for (int j = 0; j < 4; j++) {
-			if (g[i][j] == 0)
-				plateau[i][j] = "     ";
-			else if (to_string(g[i][j]).length() == 1) {
-				plateau[i][j] = "  " + to_string(g[i][j]) + "  ";
+        ss<<"*";
+        for (int j = 0; j < 4; j++) {
+			if (g[i][j] == 0){
+				ss<<"     "<<"*";
+			}else if (to_string(g[i][j]).length() == 1) {
+                ss<<"  "<<g[i][j]<<"  "<<"*";
 			}
 			else if (to_string(g[i][j]).length() == 2) {
-				plateau[i][j] = " " + to_string(g[i][j]) + "  ";
+                ss<<" "<<g[i][j]<<"  "<<"*";
 			}
 			else if (to_string(g[i][j]).length() == 3) {
-				plateau[i][j] = " " + to_string(g[i][j]) + " ";
+                ss<<" "<<g[i][j]<<" "<<"*";
 			}
 			else if (to_string(g[i][j]).length() == 4) {
-				plateau[i][j] = to_string(g[i][j]) + " ";
+                ss<<g[i][j]<<" "<<"*";
 			}
+            
 
 		}
+        ss<<endl<<"*************************"<<endl;
 	}
-	cout << "*************************" << endl;
-	cout << "*" << plateau[0][0] << "*" << plateau[0][1] << "*" << plateau[0][2] << "*" << plateau[0][3] << "*" << endl;
-	cout << "*************************" << endl;
-	cout << "*" << plateau[1][0] << "*" << plateau[1][1] << "*" << plateau[1][2] << "*" << plateau[1][3] << "*" << endl;
-	cout << "*************************" << endl;
-	cout << "*" << plateau[2][0] << "*" << plateau[2][1] << "*" << plateau[2][2] << "*" << plateau[2][3] << "*" << endl;
-	cout << "*************************" << endl;
-	cout << "*" << plateau[3][0] << "*" << plateau[3][1] << "*" << plateau[3][2] << "*" << plateau[3][3] << "*" << endl;
-	cout << "*************************" << endl;
-   cout << endl;
-
+    dessine = ss.str();
+	return dessine;
 }
+
+//S'il y a des espaces sur le plateau ou si vous pouvez faire n'importe quel mouvement, le jeu n'est pas terminé.
 bool estTermine(PlateauScore plateau) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -231,6 +253,7 @@ bool estTermine(PlateauScore plateau) {
 	return false;
 }
 
+//Si une cellule contient 2048, la partie est gagnée.
 bool estGagnant(Plateau plateau) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -240,4 +263,3 @@ bool estGagnant(Plateau plateau) {
 	}
 	return false;
 }
-

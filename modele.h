@@ -4,12 +4,11 @@
 using namespace std;
 const int GAUCHE = 7, DROITE = 4, HAUT = 8, BAS = 2;
 typedef vector<vector<int>> Plateau;
+//Une structure contenant le plateau et le score, le score étant mis à jour en temps réel à chaque coup.
 struct PlateauScore {
 	Plateau plateau;
 	int score;
 };
-/** Des fonctions peuvent être ajoutés à ce fichier si besoin est (fonctions pour mettre à jour le score par exemple)
- * //
 
 /** génère un Plateau de dimensions 4*4 ne contenant que des 0
  *  @return un Plateau vide
@@ -27,49 +26,49 @@ Plateau plateauInitial();
 int tireDeuxOuQuatre();
 
 /** déplace les tuiles d'un Plateau vers la gauche et les combine si possible
- *  @param plateau le Plateau
- *  @return le Plateau une fois déplacé vers la gauche
+ *  @param plateau la stucture PlateauScore
+ *  @return le PlateauScore une fois déplacé vers la gauche
  **/
 PlateauScore deplacementGauche(PlateauScore plateau);
 
 /** déplace les tuiles d'un Plateau vers la droite et les combine si possible
- *  @param plateau le Plateau
- *  @return le Plateau une fois déplacé vers la droite
+ *  @param plateau la stucture PlateauScore
+ *  @return le PlateauScore une fois déplacé vers la droite
  **/
 PlateauScore deplacementDroite(PlateauScore plateau);
 
 /** déplace les tuiles d'un Plateau vers le haut et les combine si possible
- *  @param plateau le Plateau
- *  @return le Plateau une fois déplacé vers le haut
+ *  @param plateau la stucture PlateauScore
+ *  @return le PlateauScore une fois déplacé vers le haut
  **/
 PlateauScore deplacementHaut(PlateauScore plateau);
 
 /** déplace les tuiles d'un Plateau vers le bas et les combine si possible
- *  @param plateau le Plateau
- *  @return le Plateau une fois déplacé vers le bas
+ *  @param plateau la stucture PlateauScore
+ *  @return le PlateauScore une fois déplacé vers le bas
  **/
 PlateauScore deplacementBas(PlateauScore plateau);
 
 /** déplace les tuiles d'un Plateau dans la direction donnée et génère une nouvelle tuile si le déplacement est valide
- *  @param plateau le Plateau
+ *  @param plateau la stucture PlateauScore
  *  @param direction la direction
- *  @return le Plateau déplacé dans la direction
+ *  @return le PlateauScore déplacé dans la direction
  **/
 PlateauScore deplacement(PlateauScore plateau, int direction);
 
 /** affiche un Plateau
  * @param p le Plateau
  **/
-void dessine(Plateau g);
+string dessine(Plateau g);
 
 /** permet de savoir si une partie est terminée
  *  @param plateau un Plateau
- *  @return true si le plateau est vide, false sinon
+ *  @return true si une partie est terminée, false sinon
  **/
 bool estTermine(PlateauScore plateau);
 
 /** permet de savoir si une partie est gagnée
- * @param plateau un Plateau
+ * @param plateau la stucture PlateauScore
  * @return true si le plateau contient un 2048, false sinon
  **/
 bool estGagnant(Plateau plateau);
